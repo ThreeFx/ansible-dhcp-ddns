@@ -1,40 +1,38 @@
-Role Name
+dhcp-ddns
 =========
 
-A brief description of the role goes here.
+Sets up isc-dhcp-server with automatic DDNS updates to BIND9. Currently IPv4
+only.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should
-be mentioned here. For instance, if the role uses the EC2 module, it may be a
-good idea to mention in this section that the boto package is required.
+None.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including
-any variables that are in defaults/main.yml, vars/main.yml, and any variables
-that can/should be set via parameters to the role. Any variables that are read
-from other roles and/or the global scope (ie. hostvars, group vars, etc.) should
-be mentioned here as well.
+| Variable Name | Default Value | Description |
+--------------- |---------------|--------------
+ **`dhcp_ddns_domain_name`** | - | Domain to use for DDNS updates, must be set
+ `dhcp_ddns_v4_dhcp_interfaces` | [] | Interfaces on which dhcpd should listen
+ `dhcp_ddns_v6_dhcp_interfaces` | [] | _currently unused_
+ `dhcp_ddns_v4_dns_servers` | [] | DNS servers which should be advertised
+ `dhcp_ddns_v4_subnets` | [] | Subnets which should be configured, see `defaults/main.yml` for more information
+ `dhcp_ddns_v4_reverse_zones` | Reverse zones for PTR updates. Only /24 supported, see `defaults/main.yml` for more information
+ `dhcp_ddns_v4_static_mappings` | [] | Static mappings between MACs and IP addresses, swee `defaults/main.yml` for more information
+ `dhcp_ddns_key` | `"ddns_key"` | Name of the key used for signing DDNS updates
+ `dhcp_ddns_key_hmac_algorithm` | `hmac-sha384` | Hash used for signing DDNS updates
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in
-regards to parameters that may need to be set for other roles, or variables that
-are used from other roles.
+None.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables
-passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: dhcp_ddns, x: 42 }
+See `molecule/default/playbook.yml`.
 
 License
 -------
@@ -44,5 +42,4 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a
-website (HTML is not allowed).
+Find me on [GitHub](https://github.com/ThreeFx)

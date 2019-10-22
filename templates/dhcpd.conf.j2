@@ -7,7 +7,9 @@
 
 # option definitions common to all supported networks...
 option domain-name "{{ dhcp_ddns_domain_name }}";
+{% if dhcp_ddns_v4_dns_servers != [] %}
 option domain-name-servers {{ dhcp_ddns_v4_dns_servers | join(', ') }};
+{% endif %}
 
 default-lease-time 600;
 max-lease-time 7200;
@@ -28,25 +30,32 @@ include "/etc/dhcp/ddns.key";
 authoritative;
 
 {% for subnet in dhcp_ddns_v4_subnets %}
-subnet {{ subnet.ip_range }} netmask {{ subnet.netmask }} {
+subnet {{ subnet.network }} netmask {{ subnet.netmask }} {
+{% if subnet.routers is defined %}
   option routers {{ subnet.routers | join(', ') }};
+{% endif %}
 {% if subnet.dhcp_range is defined %}
   range {{ subnet.dhcp_range.begin }} {{ subnet.dhcp_range.end }};
-{% endif %}
-{% if subnet.domain_name is defined %}
-  domain-name "{{ subnet.domain_name }}";
 {% endif %}
 }
 {% endfor %}
 
+{% for host in dhcp_ddns_v4_static_mappings %}
+host {{ host.name }} {
+    hardware ethernet {{ host.mac }};
+    fixed-address {{ host.ip }};
+}
+
+{% endfor %}
+
 zone {{ dhcp_ddns_domain_name }}. {
-    primary {{ dhcp_ddns_update_server }};
+    primary 127.0.0.1;
     key {{ dhcp_ddns_key }};
 }
 
 {% for rz in dhcp_ddns_v4_reverse_zones %}
 zone {{ rz }}.in-addr.arpa. {
-    primary {{ dhcp_ddns_update_server }};
+    primary 127.0.0.1;
     key {{ dhcp_ddns_key }};
 }
 {% endfor %}

@@ -1,14 +1,31 @@
 ---
-dhcp_ddns_update_server: "127.0.0.1"
+dhcp_ddns_v4_dhcp_interfaces: []  # interfaces dhcpd should listen on (IPv4)
+dhcp_ddns_v6_dhcp_interfaces: []  # currently unused
 
-dhcp_ddns_key: "ddns_key"
-dhcp_ddns_key_hmac_algorithm: "hmac-sha384"
+dhcp_ddns_v4_subnets: []          # Subnet configurations
+# - network: 172.17.0.0           # network which is managed by isc-dhcp-server
+#   netmask: 255.255.0.0          # this MUST be the exact subnet of the above network!
+#   routers:                      # optional, routers for this subnet
+#     - 172.17.0.1
+#   dhcp_range:                   # optional, the allowed DHCP range for this subnet
+#     begin: 172.17.0.100
+#     end: 172.17.0.150
 
-# TODO: Decide whether we want to allow this option
-dhcp_ddns_v4_dhcp_interfaces: []
-dhcp_ddns_v6_dhcp_interfaces: []
+dhcp_ddns_v4_dns_servers: []      # DNS servers to advertise
+# - 172.16.0.1
+# - 172.16.0.2
 
-dhcp_ddns_v4_reverse_zones: []
-# - 0.17.172
-# - 1.17.172
+dhcp_ddns_v4_reverse_zones: []    # reverse zones for PTR records (only /24 supported)
+# - 0.17.172                      # if your subnet is larger than a /24 you will have to
+# - 1.17.172                      # list ALL zones in reverse /24 notation here
 # ...
+
+dhcp_ddns_v4_static_mappings: []  # Static mappings between MACs and IP addresses
+# - name: hostname                # human-readable name for this entry
+                                  # this is NOT equal to the DDNS entry!
+#   mac: 00:00:00:00:00:00        # MAC address of the mapped device
+#   ip: 169.254.0.1               # IP address the device should be assigned
+
+
+dhcp_ddns_key: "ddns_key"                    # Name of the signing key for DDNS updates
+dhcp_ddns_key_hmac_algorithm: "hmac-sha384"  # Signature algorithms for DDNS updates

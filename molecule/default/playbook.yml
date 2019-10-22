@@ -11,7 +11,7 @@
           - 192.168.0.1
           - 192.168.0.2
         dhcp_ddns_v4_subnets:
-          - ip_range: 172.17.0.0
+          - network: 172.17.0.0
             netmask: 255.255.0.0
             routers:
               - 172.17.0.1
@@ -21,3 +21,7 @@
         dhcp_ddns_v4_reverse_zones:
           - 0.17.172
           - 1.17.172
+        dhcp_ddns_v4_static_mappings:
+          - name: test
+            mac: 02:42:ac:11:00:03
+            ip: 172.17.0.200

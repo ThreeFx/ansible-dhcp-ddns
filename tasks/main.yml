@@ -1,8 +1,13 @@
 ---
-- name: Fail when neither v4 nor v6 interfaces configured
+- name: Fail when no domain name is specified
+  fail:
+    msg: Please provide a dhcp_ddns_domain_name
+  when: not (dhcp_ddns_domain_name is defined)
+
+- name: Fail when no v4 interfaces configured
   fail:
     msg: Please define either dhcp_ddns_v4_dhcp_interfaces or dhcp_ddns_v6_dhcp_interfaces
-  when: dhcp_ddns_v4_dhcp_interfaces == [] and dhcp_ddns_v6_dhcp_interfaces == []
+  when: dhcp_ddns_v4_dhcp_interfaces == []
 
 - name: Install bind and dhcpd
   become: True
@@ -23,7 +28,8 @@
 
 - name: Generate key
   delegate_to: localhost
-  shell: >
+  shell: |
+    set -o pipefail
     head -c 48 /dev/random | base64 -w 0
   register: dhcp_ddns_generated_key
   notify:
