@@ -8,8 +8,8 @@
           - eth0
         dhcp_ddns_domain_name: example.org
         dhcp_ddns_v4_dns_servers:
-          - 8.8.8.8
-          - 8.8.4.4
+          - 192.168.0.1
+          - 192.168.0.2
         dhcp_ddns_v4_subnets:
           - ip_range: 172.17.0.0
             netmask: 255.255.0.0
