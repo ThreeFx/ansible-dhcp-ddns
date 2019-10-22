@@ -1,0 +1,91 @@
+---
+- name: Fail when neither v4 nor v6 interfaces configured
+  fail:
+    msg: Please define either dhcp_ddns_dhcpv4_interfaces or dhcp_ddns_dhcpv6_interfaces
+  when: dhcp_ddns_dhcpv4_interfaces == [] and dhcp_ddns_dhcpv6_interfaces == []
+
+- name: Install bind and dhcpd
+  become: True
+  apt:
+    name:
+      - procps # TODO: Fix after https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=907288 is resolved
+      - bind9
+      - isc-dhcp-server
+    state: present
+
+- name: Check if key is present already
+  stat:
+    path: "{{ item }}"
+  register: dhcp_ddns_key_exists
+  with_items:
+    - /etc/bind/ddns.key
+    - /etc/dhcp/ddns.key
+
+- name: Generate key
+  delegate_to: localhost
+  shell: >
+    head -c 48 /dev/random | base64 -w 0
+  register: dhcp_ddns_key
+  notify:
+    - restart dhcpd
+    - restart bind9
+  when: not (dhcp_ddns_key_exists.results[0].stat.exists and dhcp_ddns_key_exists.results[1].stat.exists) # TODO: Write in a nicer way
+
+- name: Roll out key
+  become: True
+  template:
+    src: ddns.key.j2
+    dest: "{{ item.file }}"
+    group: "{{ item.group }}"
+    mode: 0640
+  with_items:
+    - { file: /etc/dhcp/ddns.key, group: root }
+    - { file: /etc/bind/ddns.key, group: bind }
+  when: not (dhcp_ddns_key_exists.results[0].stat.exists and dhcp_ddns_key_exists.results[1].stat.exists) # TODO: Write in a nicer way
+
+- name: Configure isc-dhcp-server
+  become: True
+  template:
+    src: dhcpd.conf.j2
+    dest: /etc/dhcp/dhcpd.conf
+  notify: restart dhcpd
+
+- name: Configure defaults for isc-dhcp-server
+  become: True
+  template:
+    src: isc-dhcp-server-defaults.j2
+    dest: /etc/default/isc-dhcp-server
+  notify: restart dhcpd
+
+- name: Configure bind9
+  become: True
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/bind/{{ item }}"
+  notify: restart bind9
+  with_items:
+    - named.conf.options
+    - named.conf.local
+
+- name: Configure db for domain
+  become: True
+  template:
+    src: "db.domain.j2"
+    dest: "/var/lib/bind/db.{{ dhcp_ddns_domain_name }}"
+  notify: restart bind9
+
+- name: Configure db for reverse zones
+  become: True
+  template:
+    src: "db.reverse.j2"
+    dest: "/var/lib/bind/db.{{ item }}"
+  notify: restart bind9
+  with_items: "{{ dhcp_ddns_reverse_zones }}"
+
+- name: Link dbs to /var/lib/bind
+  file:
+    src: "/var/lib/bind/db.{{ item }}"
+    dest: "/etc/bind/db.{{ item }}"
+    state: link
+  notify: restart bind9
+  with_items: "{{ [dhcp_ddns_domain_name] + dhcp_ddns_reverse_zones }}"

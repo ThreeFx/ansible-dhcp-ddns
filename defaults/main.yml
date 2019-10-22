@@ -1,0 +1,14 @@
+---
+dhcp_ddns_ddns_update_server: "127.0.0.1"
+
+dhcp_ddns_key: "ddns_key"
+dhcp_ddns_key_hmac_algorithm: "hmac-sha384"
+
+# TODO: Decide whether we want to allow this option
+dhcp_ddns_dhcpv4_interfaces: []
+dhcp_ddns_dhcpv6_interfaces: []
+
+dhcp_ddns_reverse_zones: []
+# - 0.17.172
+# - 1.17.172
+# ...

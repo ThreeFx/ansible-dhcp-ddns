@@ -1,0 +1,14 @@
+---
+- name: restart dhcpd
+  become: True
+  systemd:
+    name: isc-dhcp-server
+    state: restarted
+    enabled: yes
+
+- name: restart bind9
+  become: True
+  systemd:
+    name: bind9
+    state: restarted
+    enabled: yes

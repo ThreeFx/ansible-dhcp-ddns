@@ -1,0 +1,25 @@
+//
+// Do any local configuration here
+//
+
+// Consider adding the 1918 zones here, if they are not used in your
+// organization
+//include "/etc/bind/zones.rfc1918";
+
+include "/etc/bind/ddns.key";
+
+zone "{{ dhcp_ddns_domain_name }}" {
+    type master;
+    file "/var/lib/bind/db.{{ dhcp_ddns_domain_name }}";
+    notify no;
+    allow-update { key {{ dhcp_ddns_key }}; };
+};
+
+{% for rz in dhcp_ddns_reverse_zones %}
+zone "{{ rz }}.in-addr.arpa" {
+    type master;
+    file "/var/lib/bind/db.{{ rz }}";
+    notify no;
+    allow-update { key {{ dhcp_ddns_key }}; };
+};
+{% endfor %}

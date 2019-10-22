@@ -1,0 +1,52 @@
+# {{ ansible_managed }}
+#
+# dhcpd.conf
+#
+# Configuration file for ISC dhcpd
+#
+
+# option definitions common to all supported networks...
+option domain-name "{{ dhcp_ddns_domain_name }}";
+option domain-name-servers {{ dhcp_ddns_dns_servers | join(', ') }};
+
+default-lease-time 600;
+max-lease-time 7200;
+
+# The ddns-updates-style parameter controls whether or not the server will
+# attempt to do a DNS update when a lease is confirmed. We default to the
+# behavior of the version 2 packages ('none', since DHCP v2 didn't
+# have support for DDNS.)
+ddns-updates on;
+ddns-update-style interim;
+ignore client-updates;
+update-static-leases on;
+
+include "/etc/dhcp/ddns.key";
+
+# If this DHCP server is the official DHCP server for the local
+# network, the authoritative directive should be uncommented.
+authoritative;
+
+{% for subnet in dhcp_ddns_subnets %}
+subnet {{ subnet.ip_range }} netmask {{ subnet.netmask }} {
+  option routers {{ subnet.routers | join(', ') }};
+{% if subnet.dhcp_range is defined %}
+  range {{ subnet.dhcp_range.begin }} {{ subnet.dhcp_range.end }};
+{% endif %}
+{% if subnet.domain_name is defined %}
+  domain-name "{{ subnet.domain_name }}";
+{% endif %}
+}
+{% endfor %}
+
+zone {{ dhcp_ddns_domain_name }}. {
+    primary {{ dhcp_ddns_ddns_update_server }};
+    key {{ dhcp_ddns_key }};
+}
+
+{% for rz in dhcp_ddns_reverse_zones %}
+zone {{ rz }}.in-addr.arpa. {
+    primary {{ dhcp_ddns_ddns_update_server }};
+    key {{ dhcp_ddns_key }};
+}
+{% endfor %}
