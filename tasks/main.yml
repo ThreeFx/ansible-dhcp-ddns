@@ -1,8 +1,8 @@
 ---
 - name: Fail when neither v4 nor v6 interfaces configured
   fail:
-    msg: Please define either dhcp_ddns_dhcpv4_interfaces or dhcp_ddns_dhcpv6_interfaces
-  when: dhcp_ddns_dhcpv4_interfaces == [] and dhcp_ddns_dhcpv6_interfaces == []
+    msg: Please define either dhcp_ddns_v4_dhcp_interfaces or dhcp_ddns_v6_dhcp_interfaces
+  when: dhcp_ddns_v4_dhcp_interfaces == [] and dhcp_ddns_v6_dhcp_interfaces == []
 
 - name: Install bind and dhcpd
   become: True
@@ -80,7 +80,7 @@
     src: "db.reverse.j2"
     dest: "/var/lib/bind/db.{{ item }}"
   notify: restart bind9
-  with_items: "{{ dhcp_ddns_reverse_zones }}"
+  with_items: "{{ dhcp_ddns_v4_reverse_zones }}"
 
 - name: Link dbs to /var/lib/bind
   file:
@@ -88,4 +88,4 @@
     dest: "/etc/bind/db.{{ item }}"
     state: link
   notify: restart bind9
-  with_items: "{{ [dhcp_ddns_domain_name] + dhcp_ddns_reverse_zones }}"
+  with_items: "{{ [dhcp_ddns_domain_name] + dhcp_ddns_v4_reverse_zones }}"

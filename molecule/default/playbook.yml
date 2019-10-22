@@ -4,13 +4,13 @@
   roles:
     - role: dhcp-ddns
       vars:
-        dhcp_ddns_dhcpv4_interfaces:
+        dhcp_ddns_v4_dhcp_interfaces:
           - eth0
         dhcp_ddns_domain_name: example.org
-        dhcp_ddns_dns_servers:
+        dhcp_ddns_v4_dns_servers:
           - 8.8.8.8
           - 8.8.4.4
-        dhcp_ddns_subnets:
+        dhcp_ddns_v4_subnets:
           - ip_range: 172.17.0.0
             netmask: 255.255.0.0
             routers:
@@ -18,7 +18,6 @@
             dhcp_range:
               begin: 172.17.0.100
               end: 172.17.0.150
-        dhcp_ddns_reverse_zones:
+        dhcp_ddns_v4_reverse_zones:
           - 0.17.172
           - 1.17.172
-        dhcp_ddns_interface: eth0

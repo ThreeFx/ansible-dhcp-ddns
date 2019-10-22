@@ -15,7 +15,7 @@ zone "{{ dhcp_ddns_domain_name }}" {
     allow-update { key {{ dhcp_ddns_key }}; };
 };
 
-{% for rz in dhcp_ddns_reverse_zones %}
+{% for rz in dhcp_ddns_v4_reverse_zones %}
 zone "{{ rz }}.in-addr.arpa" {
     type master;
     file "/var/lib/bind/db.{{ rz }}";

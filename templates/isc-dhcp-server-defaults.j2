@@ -16,9 +16,9 @@
 
 # On what interfaces should the DHCP server (dhcpd) serve DHCP requests?
 #	Separate multiple interfaces with spaces, e.g. "eth0 eth1".
-{% if dhcp_ddns_dhcpv4_interfaces != [] %}
-INTERFACESv4="{{ dhcp_ddns_dhcpv4_interfaces | join(' ') }}"
+{% if dhcp_ddns_v4_dhcp_interfaces != [] %}
+INTERFACESv4="{{ dhcp_ddns_v4_dhcp_interfaces | join(' ') }}"
 {% endif %}
-{% if dhcp_ddns_dhcpv6_interfaces != [] %}
-INTERFACESv6="{{ dhcp_ddns_dhcpv6_interfaces | join(' ') }} "
+{% if dhcp_ddns_v6_dhcp_interfaces != [] %}
+INTERFACESv6="{{ dhcp_ddns_v6_dhcp_interfaces | join(' ') }} "
 {% endif %}

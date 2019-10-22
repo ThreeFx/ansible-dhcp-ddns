@@ -7,7 +7,7 @@
 
 # option definitions common to all supported networks...
 option domain-name "{{ dhcp_ddns_domain_name }}";
-option domain-name-servers {{ dhcp_ddns_dns_servers | join(', ') }};
+option domain-name-servers {{ dhcp_ddns_v4_dns_servers | join(', ') }};
 
 default-lease-time 600;
 max-lease-time 7200;
@@ -27,7 +27,7 @@ include "/etc/dhcp/ddns.key";
 # network, the authoritative directive should be uncommented.
 authoritative;
 
-{% for subnet in dhcp_ddns_subnets %}
+{% for subnet in dhcp_ddns_v4_subnets %}
 subnet {{ subnet.ip_range }} netmask {{ subnet.netmask }} {
   option routers {{ subnet.routers | join(', ') }};
 {% if subnet.dhcp_range is defined %}
@@ -40,13 +40,13 @@ subnet {{ subnet.ip_range }} netmask {{ subnet.netmask }} {
 {% endfor %}
 
 zone {{ dhcp_ddns_domain_name }}. {
-    primary {{ dhcp_ddns_ddns_update_server }};
+    primary {{ dhcp_ddns_update_server }};
     key {{ dhcp_ddns_key }};
 }
 
-{% for rz in dhcp_ddns_reverse_zones %}
+{% for rz in dhcp_ddns_v4_reverse_zones %}
 zone {{ rz }}.in-addr.arpa. {
-    primary {{ dhcp_ddns_ddns_update_server }};
+    primary {{ dhcp_ddns_update_server }};
     key {{ dhcp_ddns_key }};
 }
 {% endfor %}
