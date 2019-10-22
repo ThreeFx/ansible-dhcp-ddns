@@ -25,7 +25,7 @@
   delegate_to: localhost
   shell: >
     head -c 48 /dev/random | base64 -w 0
-  register: dhcp_ddns_key
+  register: dhcp_ddns_generated_key
   notify:
     - restart dhcpd
     - restart bind9

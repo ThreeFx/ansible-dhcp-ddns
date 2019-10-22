@@ -2,7 +2,7 @@
 - name: Converge
   hosts: all
   roles:
-    - role: dhcp_ddns
+    - role: dhcp-ddns
       vars:
         dhcp_ddns_dhcpv4_interfaces:
           - eth0
