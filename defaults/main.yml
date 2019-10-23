@@ -2,6 +2,8 @@
 dhcp_ddns_v4_dhcp_interfaces: []  # required, interfaces dhcpd should listen on (IPv4)
 dhcp_ddns_v6_dhcp_interfaces: []  # currently unused
 
+dhcp_ddns_domain_name: ""         # optional, name of the local domain
+
 dhcp_ddns_v4_subnets: []          # optional, subnet configurations
 # - network: 172.17.0.0           # network which is managed by isc-dhcp-server
 #   netmask: 255.255.0.0          # this MUST be the exact subnet of the above network!

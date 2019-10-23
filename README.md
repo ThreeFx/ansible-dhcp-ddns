@@ -14,7 +14,7 @@ Role Variables
 
 | Variable Name | Default Value | Description |
 --------------- |---------------|--------------
- `dhcp_ddns_domain_name` | - | requried, domain to use for DDNS updates, must be set
+ `dhcp_ddns_domain_name` | - | required, domain to use for DDNS updates, must be set
  `dhcp_ddns_v4_dhcp_interfaces` | [] | required, interfaces on which dhcpd should listen
  `dhcp_ddns_v6_dhcp_interfaces` | [] | _currently unused_
  `dhcp_ddns_v4_dns_servers` | [] | optional, DNS servers which should be advertised

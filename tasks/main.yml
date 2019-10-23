@@ -2,7 +2,7 @@
 - name: Fail when no domain name is specified
   fail:
     msg: Please provide a dhcp_ddns_domain_name
-  when: not (dhcp_ddns_domain_name is defined)
+  when: dhcp_ddns_domain_name == ""
 
 - name: Fail when no v4 interfaces configured
   fail:
@@ -91,6 +91,7 @@
   with_items: "{{ dhcp_ddns_v4_reverse_zones }}"
 
 - name: Link dbs to /var/lib/bind
+  become: True
   file:
     src: "/var/lib/bind/db.{{ item }}"
     dest: "/etc/bind/db.{{ item }}"
