@@ -21,7 +21,7 @@ Role Variables
  `dhcp_ddns_v4_subnets` | [] | optional, subnets which should be configured, see `defaults/main.yml` for more information
  `dhcp_ddns_v4_reverse_zones` | [] | optional, reverse zones for PTR updates. Only /24 supported, see `defaults/main.yml` for more information
  `dhcp_ddns_v4_static_mappings` | [] | optional, static mappings between MACs and IP addresses, swee `defaults/main.yml` for more information
- `dhcp_ddns_bind_allowed_hosts` | [] | optional, hosts / ip ranges allowed to query BIND9
+ `dhcp_ddns_bind_allowed_hosts` | [] | optional, hosts / ip ranges allowed to query BIND9, put at least localhost addresses here.
  `dhcp_ddns_key` | `"ddns_key"` | optional, name of the key used for signing DDNS updates
  `dhcp_ddns_key_hmac_algorithm` | `hmac-sha384` | optional, hash used for signing DDNS updates
 

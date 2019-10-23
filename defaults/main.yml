@@ -26,9 +26,9 @@ dhcp_ddns_v4_static_mappings: []  # optional, static mappings between MACs and I
 #   mac: 00:00:00:00:00:00        # MAC address of the mapped device
 #   ip: 169.254.0.1               # IP address the device should be assigned
 
-dhcp_ddns_bind_allowed_hosts: []  # optional, hosts allowed to query BIND9
+dhcp_ddns_bind_additional_allowed_hosts: []  # optional, hosts allowed to query BIND9 besides localhost
 # - "10.0.0.0/8"
-# - "127.0.0.1/8"
+# - "169.254.0.0/16"
 
 dhcp_ddns_key: "ddns_key"                    # optional, name of the signing key for DDNS updates
 dhcp_ddns_key_hmac_algorithm: "hmac-sha384"  # optional, signature algorithms for DDNS updates
