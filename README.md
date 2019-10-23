@@ -19,7 +19,7 @@ Role Variables
  `dhcp_ddns_v6_dhcp_interfaces` | [] | _currently unused_
  `dhcp_ddns_v4_dns_servers` | [] | DNS servers which should be advertised
  `dhcp_ddns_v4_subnets` | [] | Subnets which should be configured, see `defaults/main.yml` for more information
- `dhcp_ddns_v4_reverse_zones` | Reverse zones for PTR updates. Only /24 supported, see `defaults/main.yml` for more information
+ `dhcp_ddns_v4_reverse_zones` | [] | Reverse zones for PTR updates. Only /24 supported, see `defaults/main.yml` for more information
  `dhcp_ddns_v4_static_mappings` | [] | Static mappings between MACs and IP addresses, swee `defaults/main.yml` for more information
  `dhcp_ddns_key` | `"ddns_key"` | Name of the key used for signing DDNS updates
  `dhcp_ddns_key_hmac_algorithm` | `hmac-sha384` | Hash used for signing DDNS updates
