@@ -31,6 +31,8 @@
   shell: |
     set -o pipefail
     head -c 48 /dev/random | base64 -w 0
+  args:
+    executable: /bin/bash
   register: dhcp_ddns_generated_key
   notify:
     - restart dhcpd
