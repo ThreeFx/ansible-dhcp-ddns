@@ -1,7 +1,11 @@
 options {
 	directory "/var/cache/bind";
 
-    allow-query { any; };
+    allow-query {
+{% for entry in dhcp_ddns_bind_allowed_hosts %}
+        {{ entry }};
+{% endfor %}
+    };
 
     recursion no;
     allow-transfer { none; };

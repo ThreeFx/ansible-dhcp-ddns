@@ -14,20 +14,25 @@ Role Variables
 
 | Variable Name | Default Value | Description |
 --------------- |---------------|--------------
- **`dhcp_ddns_domain_name`** | - | Domain to use for DDNS updates, must be set
- `dhcp_ddns_v4_dhcp_interfaces` | [] | Interfaces on which dhcpd should listen
+ `dhcp_ddns_domain_name` | - | requried, domain to use for DDNS updates, must be set
+ `dhcp_ddns_v4_dhcp_interfaces` | [] | required, interfaces on which dhcpd should listen
  `dhcp_ddns_v6_dhcp_interfaces` | [] | _currently unused_
- `dhcp_ddns_v4_dns_servers` | [] | DNS servers which should be advertised
- `dhcp_ddns_v4_subnets` | [] | Subnets which should be configured, see `defaults/main.yml` for more information
- `dhcp_ddns_v4_reverse_zones` | [] | Reverse zones for PTR updates. Only /24 supported, see `defaults/main.yml` for more information
- `dhcp_ddns_v4_static_mappings` | [] | Static mappings between MACs and IP addresses, swee `defaults/main.yml` for more information
- `dhcp_ddns_key` | `"ddns_key"` | Name of the key used for signing DDNS updates
- `dhcp_ddns_key_hmac_algorithm` | `hmac-sha384` | Hash used for signing DDNS updates
+ `dhcp_ddns_v4_dns_servers` | [] | optional, DNS servers which should be advertised
+ `dhcp_ddns_v4_subnets` | [] | optional, subnets which should be configured, see `defaults/main.yml` for more information
+ `dhcp_ddns_v4_reverse_zones` | [] | optional, reverse zones for PTR updates. Only /24 supported, see `defaults/main.yml` for more information
+ `dhcp_ddns_v4_static_mappings` | [] | optional, static mappings between MACs and IP addresses, swee `defaults/main.yml` for more information
+ `dhcp_ddns_bind_allowed_hosts` | [] | optional, hosts / ip ranges allowed to query BIND9
+ `dhcp_ddns_key` | `"ddns_key"` | optional, name of the key used for signing DDNS updates
+ `dhcp_ddns_key_hmac_algorithm` | `hmac-sha384` | optional, hash used for signing DDNS updates
 
 Dependencies
 ------------
 
 None.
+
+## Optional
+
+Works well with my [unbound](https://github.com/ThreeFx/unbound) role.
 
 Example Playbook
 ----------------
@@ -42,4 +47,4 @@ BSD
 Author Information
 ------------------
 
-Find me on [GitHub](https://github.com/ThreeFx)
+Find me on [GitHub](https://github.com/ThreeFx).
