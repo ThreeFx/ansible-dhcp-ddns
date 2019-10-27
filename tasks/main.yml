@@ -80,6 +80,7 @@
   template:
     src: "db.domain.j2"
     dest: "/var/lib/bind/db.{{ dhcp_ddns_domain_name }}"
+    force: no
   notify: restart bind9
 
 - name: Configure db for reverse zones
@@ -87,6 +88,7 @@
   template:
     src: "db.reverse.j2"
     dest: "/var/lib/bind/db.{{ item }}"
+    force: no
   notify: restart bind9
   with_items: "{{ dhcp_ddns_v4_reverse_zones }}"
 
