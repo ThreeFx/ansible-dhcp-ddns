@@ -30,32 +30,39 @@ include "/etc/dhcp/ddns.key";
 authoritative;
 
 {% for subnet in dhcp_ddns_v4_subnets %}
-subnet {{ subnet.network }} netmask {{ subnet.netmask }} {
+group {
+	subnet {{ subnet.network }} netmask {{ subnet.netmask }} {
 {% if subnet.routers is defined %}
-  option routers {{ subnet.routers | join(', ') }};
+	  option routers {{ subnet.routers | join(', ') }};
 {% endif %}
 {% if subnet.dhcp_range is defined %}
-  range {{ subnet.dhcp_range.begin }} {{ subnet.dhcp_range.end }};
+	  range {{ subnet.dhcp_range.begin }} {{ subnet.dhcp_range.end }};
 {% endif %}
-}
+{% if subnet.domain_name is defined %}
+	  domain-name {{ subnet.domain_name }};
+{% endif %}
+	}
+	
+{% for host in subnet.static_mappings %}
+	host {{ host.name }} {
+	    hardware ethernet {{ host.mac }};
+	    fixed-address {{ host.ip }};
+	}
+	
 {% endfor %}
-
-{% for host in dhcp_ddns_v4_static_mappings %}
-host {{ host.name }} {
-    hardware ethernet {{ host.mac }};
-    fixed-address {{ host.ip }};
-}
+	
+	zone {{ subnet.domain_name | default(dhcp_ddns_domain_name) }}. {
+	    primary 127.0.0.1;
+	    key {{ dhcp_ddns_key }};
+	}
+	
+{% for rz in subnet.reverse_zones %}
+	zone {{ rz }}.in-addr.arpa. {
+	    primary 127.0.0.1;
+	    key {{ dhcp_ddns_key }};
+	}
 
 {% endfor %}
-
-zone {{ dhcp_ddns_domain_name }}. {
-    primary 127.0.0.1;
-    key {{ dhcp_ddns_key }};
 }
 
-{% for rz in dhcp_ddns_v4_reverse_zones %}
-zone {{ rz }}.in-addr.arpa. {
-    primary 127.0.0.1;
-    key {{ dhcp_ddns_key }};
-}
 {% endfor %}

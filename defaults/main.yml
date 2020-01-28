@@ -2,7 +2,7 @@
 dhcp_ddns_v4_dhcp_interfaces: []  # required, interfaces dhcpd should listen on (IPv4)
 dhcp_ddns_v6_dhcp_interfaces: []  # currently unused
 
-dhcp_ddns_domain_name: ""         # optional, name of the local domain
+dhcp_ddns_domain_name: ""         # required, name of the local domain
 
 dhcp_ddns_v4_subnets: []          # optional, subnet configurations
 # - network: 172.17.0.0           # network which is managed by isc-dhcp-server
@@ -12,21 +12,21 @@ dhcp_ddns_v4_subnets: []          # optional, subnet configurations
 #   dhcp_range:                   # optional, the allowed DHCP range for this subnet
 #     begin: 172.17.0.100
 #     end: 172.17.0.150
+#   dns_servers: []               # optional, if omitted the default servers are chosen
+#   reverse_zones: []             # optional, reverse zones for PTR records. You have
+#     - 0.16.172                              to manually make sure that you configure all the
+#     - 1.16.172                              relevant zones. Currently only /24s supported.
+#   domain_name: example.com      # optional, the domain name for this subnet. If
+#                                             omitted dhcp_ddns_domain_name is chosen.
+#   static_mappings: []           # optional, static mappings between MACs and IP addresses
+#     - name: hostname            # required, human-readable name for this entry
+#                                             this is NOT equal to the DDNS entry!
+#       mac: 00:00:00:00:00:00    # required, MAC address of the mapped device
+#       ip: 169.254.0.1           # required, IP address the device should be assigned
 
-dhcp_ddns_v4_dns_servers: []      # optional, DNS servers to advertise
+dhcp_ddns_v4_dns_servers: []      # optional, default DNS servers to advertise
 # - 172.16.0.1
 # - 172.16.0.2
-
-dhcp_ddns_v4_reverse_zones: []    # optional, reverse zones for PTR records (only /24 supported)
-# - 0.17.172                      # if your subnet is larger than a /24 you will have to
-# - 1.17.172                      # list ALL zones in reverse /24 notation here
-# ...
-
-dhcp_ddns_v4_static_mappings: []  # optional, static mappings between MACs and IP addresses
-# - name: hostname                # human-readable name for this entry
-                                  # this is NOT equal to the DDNS entry!
-#   mac: 00:00:00:00:00:00        # MAC address of the mapped device
-#   ip: 169.254.0.1               # IP address the device should be assigned
 
 dhcp_ddns_bind_additional_allowed_hosts: []  # optional, hosts allowed to query BIND9 besides localhost
 # - "10.0.0.0/8"
