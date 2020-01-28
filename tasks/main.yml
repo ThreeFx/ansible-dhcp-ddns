@@ -90,7 +90,7 @@
     dest: "/var/lib/bind/db.{{ item }}"
     force: no
   notify: restart bind9
-  with_items: "{{ dhcp_ddns_v4_reverse_zones }}"
+  with_flattened: "{{ dhcp_ddns_v4_subnets | selectattr('reverse_zones', 'defined') | map(attribute='reverse_zones') | list }}"
 
 - name: Link dbs to /var/lib/bind
   become: True
@@ -99,4 +99,7 @@
     dest: "/etc/bind/db.{{ item }}"
     state: link
   notify: restart bind9
-  with_items: "{{ [dhcp_ddns_domain_name] + dhcp_ddns_v4_reverse_zones }}"
+  with_flattened:
+    - "{{ dhcp_ddns_domain_name }}"
+    - "{{ dhcp_ddns_v4_subnets | selectattr('domain_name', 'defined') | map(attribute='domain_name') | list }}"
+    - "{{ dhcp_ddns_v4_subnets | selectattr('reverse_zones', 'defined') | map(attribute='reverse_zones') | list }}"

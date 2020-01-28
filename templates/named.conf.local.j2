@@ -15,7 +15,16 @@ zone "{{ dhcp_ddns_domain_name }}" {
 	allow-update { key {{ dhcp_ddns_key }}; };
 };
 
-{% for rz in dhcp_ddns_v4_reverse_zones %}
+{% for name in (dhcp_ddns_v4_subnets | selectattr('domain_name', 'defined') | map(attribute='domain_name') | flatten) %}
+zone "{{ name }}" {
+	type master;
+	file "/var/lib/bind/db.{{ name }}";
+	notify no;
+	allow-update { key {{ dhcp_ddns_key }}; };
+};
+{% endfor %}
+
+{% for rz in (dhcp_ddns_v4_subnets | selectattr('reverse_zones', 'defined') | map(attribute='reverse_zones') | flatten) %}
 zone "{{ rz }}.in-addr.arpa" {
 	type master;
 	file "/var/lib/bind/db.{{ rz }}";

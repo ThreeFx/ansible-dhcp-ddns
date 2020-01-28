@@ -29,40 +29,44 @@ include "/etc/dhcp/ddns.key";
 # network, the authoritative directive should be uncommented.
 authoritative;
 
+# The default reverse zone
+zone {{ dhcp_ddns_domain_name }}. {
+    primary 127.0.0.1;
+    key {{ dhcp_ddns_key }};
+}
+
 {% for subnet in dhcp_ddns_v4_subnets %}
-group {
-	subnet {{ subnet.network }} netmask {{ subnet.netmask }} {
+subnet {{ subnet.network }} netmask {{ subnet.netmask }} {
 {% if subnet.routers is defined %}
-	  option routers {{ subnet.routers | join(', ') }};
+	option routers {{ subnet.routers | join(', ') }};
 {% endif %}
 {% if subnet.dhcp_range is defined %}
-	  range {{ subnet.dhcp_range.begin }} {{ subnet.dhcp_range.end }};
+	range {{ subnet.dhcp_range.begin }} {{ subnet.dhcp_range.end }};
 {% endif %}
 {% if subnet.domain_name is defined %}
-	  domain-name {{ subnet.domain_name }};
+	domain-name {{ subnet.domain_name }};
 {% endif %}
-	}
+}
 	
 {% for host in subnet.static_mappings %}
-	host {{ host.name }} {
-	    hardware ethernet {{ host.mac }};
-	    fixed-address {{ host.ip }};
-	}
-	
-{% endfor %}
-	
-	zone {{ subnet.domain_name | default(dhcp_ddns_domain_name) }}. {
-	    primary 127.0.0.1;
-	    key {{ dhcp_ddns_key }};
-	}
-	
-{% for rz in subnet.reverse_zones %}
-	zone {{ rz }}.in-addr.arpa. {
-	    primary 127.0.0.1;
-	    key {{ dhcp_ddns_key }};
-	}
-
-{% endfor %}
+host {{ host.name }} {
+    hardware ethernet {{ host.mac }};
+    fixed-address {{ host.ip }};
 }
+{% endfor %}
+
+{% if subnet.domain_name is defined %}
+zone {{ subnet.domain_name }}. {
+    primary 127.0.0.1;
+    key {{ dhcp_ddns_key }};
+}
+{% endif %}
+
+{% for rz in subnet.reverse_zones %}
+zone {{ rz }}.in-addr.arpa. {
+    primary 127.0.0.1;
+    key {{ dhcp_ddns_key }};
+}
+{% endfor %}
 
 {% endfor %}
