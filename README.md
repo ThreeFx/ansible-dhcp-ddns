@@ -19,6 +19,7 @@ Role Variables
  `dhcp_ddns_v6_dhcp_interfaces` | [] | _currently unused_
  `dhcp_ddns_v4_dns_servers` | [] | optional, default DNS servers which should be advertised
  `dhcp_ddns_v4_subnets` | [] | optional, subnets which should be configured, see `defaults/main.yml` for more information
+ `dhcp_ddns_v4_static_records` | [] | optional, static records to configure, see `defaults/main.yml` for more information
  `dhcp_ddns_bind_allowed_hosts` | [] | optional, hosts / ip ranges allowed to query BIND9, put at least localhost addresses here.
  `dhcp_ddns_key` | `"ddns_key"` | optional, name of the key used for signing DDNS updates
  `dhcp_ddns_key_hmac_algorithm` | `hmac-sha384` | optional, hash used for signing DDNS updates
