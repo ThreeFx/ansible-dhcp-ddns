@@ -12,3 +12,7 @@ $TTL	86400
 ;
 @	IN	NS	ns.{{ dhcp_ddns_domain_name }}.
 ns	IN	A	{{ ansible_default_ipv4.address }}
+
+{% for record in dhcp_ddns_v4_static_records %}
+{{ record.name }}  IN  A  {{ record.ip }}
+{% endfor %}

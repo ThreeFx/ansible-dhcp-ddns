@@ -24,6 +24,10 @@ dhcp_ddns_v4_subnets: []          # optional, subnet configurations
 #       mac: 00:00:00:00:00:00    # required, MAC address of the mapped device
 #       ip: 169.254.0.1           # required, IP address the device should be assigned
 
+dhcp_ddns_v4_static_records: []
+# - name: myhost                  # required, the host name
+#   ip: 169.245.0.1               # required, the IP to map to
+
 dhcp_ddns_v4_dns_servers: []      # optional, default DNS servers to advertise
 # - 172.16.0.1
 # - 172.16.0.2

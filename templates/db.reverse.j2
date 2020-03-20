@@ -14,3 +14,9 @@ $TTL	86400
 {% if ansible_default_ipv4.address.split('.')[2:0:-1] == item.split('.')[0:2] %}
 {{ ansible_default_ipv4.address.split('.') | last }}   IN PTR  ns.{{ dhcp_ddns_domain_name }}.
 {% endif %}
+
+{% for record in dhcp_ddns_v4_static_records %}
+{% if record.ip.split('.')[2:0:-1] == item.split('.')[0:2] %}
+{{ record.ip.split('.') | last }}   IN PTR  {{ record.name }}.{{ dhcp_ddns_domain_name }}.
+{% endif %}
+{% endfor %}
