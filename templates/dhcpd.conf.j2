@@ -46,6 +46,12 @@ subnet {{ subnet.network }} netmask {{ subnet.netmask }} {
 {% if subnet.domain_name is defined %}
 	domain-name {{ subnet.domain_name }};
 {% endif %}
+{% if subnet.default_lease_time is defined %}
+    default-lease-time {{ subnet.default_lease_time }};
+{% endif %}
+{% if subnet.max_lease_time is defined %}
+    max-lease-time {{ subnet.max_lease_time }};
+{% endif %}
 }
 	
 {% for host in subnet.static_mappings %}

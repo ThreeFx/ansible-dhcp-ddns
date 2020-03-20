@@ -12,6 +12,10 @@ dhcp_ddns_v4_subnets: []          # optional, subnet configurations
 #   dhcp_range:                   # optional, the allowed DHCP range for this subnet
 #     begin: 172.17.0.100
 #     end: 172.17.0.150
+#   default_lease_time: 600       # optional, default lease time, default: 600
+#   max_lease_time: 7200          # optional, maximum lease time, default: 7200
+#                                             be sure to set this if you want leases
+#                                             longer than 2 hours!
 #   dns_servers: []               # optional, if omitted the default servers are chosen
 #   reverse_zones: []             # optional, reverse zones for PTR records. You have
 #     - 0.16.172                              to manually make sure that you configure all the
